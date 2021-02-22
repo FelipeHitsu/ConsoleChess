@@ -10,12 +10,23 @@ namespace xadrez_console
         {
             try
             {
-                Board ChessBoard = new Board(8, 8);
-                ChessBoard.InsertPiece(new Tower(ChessBoard, Color.Black), new Position(0, 0));
-                ChessBoard.InsertPiece(new Tower(ChessBoard, Color.Black), new Position(1, 3));
-                ChessBoard.InsertPiece(new King(ChessBoard, Color.White), new Position(2, 4));
+                ChessGame game = new ChessGame();
 
-                Screen.DrawBoard(ChessBoard);
+                while (!game.Finished)
+                {
+                    Console.Clear();
+                    Screen.DrawBoard(game.GameBoard);
+
+                    Console.WriteLine();
+                    Console.Write("Origem: ");
+                    Position origin = Screen.ReadChessPosition().ToPosition();
+                    Console.Write("Destino: ");
+                    Position destination = Screen.ReadChessPosition().ToPosition();
+
+                    game.ExecuteMove(origin, destination);
+                }
+
+                
             }catch(BoardException e)
             {
                 Console.WriteLine(e.Message);

@@ -11,7 +11,7 @@ namespace chess
             Coluna = coluna;
             Linha = linha;
         }
-        public Position toPosition()
+        public Position ToPosition()
         {
             return new Position(8 - Linha, Coluna - 'a');
         }
