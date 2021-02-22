@@ -12,10 +12,7 @@ namespace xadrez_console
             try
             {
                 ChessGame game = new ChessGame();
-                
-
-
-
+           
                 while (!game.Finished)
                 {
                     //Debug
@@ -41,6 +38,11 @@ namespace xadrez_console
                     Console.Clear();
                     Screen.DrawBoard(game.GameBoard);
                     Console.WriteLine();
+
+                    Console.WriteLine("Turn: " + game.Turn);
+                    Console.WriteLine("Waiting for move: " + game.ActualPlayer);
+
+                    Console.WriteLine();
                     Console.Write("Origem: ");
                     Position origin = Screen.ReadChessPosition().ToPosition();
                     bool[,] PossiblePositions = game.GameBoard.GetPiece(origin).PossibleMoves();
@@ -49,7 +51,7 @@ namespace xadrez_console
                     Console.Write("Destino: ");
                     Position destination = Screen.ReadChessPosition().ToPosition();
 
-                    game.ExecuteMove(origin, destination);
+                    game.MakeMove(origin, destination);
                 }
 
 
