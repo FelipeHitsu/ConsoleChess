@@ -35,6 +35,28 @@ namespace chess
             GameBoard.InsertPiece(p, destination);
             if (capturedPiece != null)
                 CapturedPieces.Add(capturedPiece);
+
+            /*//Special move short castle
+            if(p is King && destination.Column == origin.Column + 2)
+            {
+                Position towerOrigin = new Position(origin.Line, origin.Column + 3);
+                Position towerDestination = new Position(origin.Line, origin.Column + 1);
+
+                Piece tower = GameBoard.RemovePiece(towerOrigin);
+                tower.IncreaseMoveCount();
+                GameBoard.InsertPiece(tower, towerDestination);
+            }
+            //Special move long castle
+            if (p is King && destination.Column == origin.Column - 2)
+            {
+                Position towerOrigin = new Position(origin.Line, origin.Column - 4);
+                Position towerDestination = new Position(origin.Line, origin.Column - 1);
+
+                Piece tower = GameBoard.RemovePiece(towerOrigin);
+                tower.IncreaseMoveCount();
+                GameBoard.InsertPiece(tower, towerDestination);
+            }*/
+
             return capturedPiece;
         }
         public void UndoMove(Position origin, Position destination, Piece captured)
@@ -47,6 +69,28 @@ namespace chess
                 CapturedPieces.Remove(captured);
             }
             GameBoard.InsertPiece(p, origin);
+
+            //Special move short castle
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position towerOrigin = new Position(origin.Line, origin.Column + 3);
+                Position towerDestination = new Position(origin.Line, origin.Column + 1);
+
+                Piece tower = GameBoard.RemovePiece(towerDestination);
+                tower.DecreaseMoveCount();
+                GameBoard.InsertPiece(tower, towerOrigin);
+            }
+            //Special move long castle
+            if (p is King && destination.Column == origin.Column - 2)
+            {
+                Position towerOrigin = new Position(origin.Line, origin.Column - 4);
+                Position towerDestination = new Position(origin.Line, origin.Column - 1);
+
+                Piece tower = GameBoard.RemovePiece(towerDestination);
+                tower.IncreaseMoveCount();
+                GameBoard.InsertPiece(tower, towerOrigin);
+            }
+
         }
         public void MakeMove(Position origin, Position destination)
         {
@@ -179,7 +223,7 @@ namespace chess
             InsertNewPiece('b',1, new Horse(GameBoard, Color.White));
             InsertNewPiece('c',1, new Bishop(GameBoard, Color.White));
             InsertNewPiece('d',1, new Queen(GameBoard, Color.White));
-            InsertNewPiece('e',1, new King(GameBoard, Color.White));
+            InsertNewPiece('e',1, new King(GameBoard, Color.White,this));
             InsertNewPiece('f',1, new Bishop(GameBoard, Color.White));
             InsertNewPiece('g',1, new Horse(GameBoard, Color.White));
             InsertNewPiece('h',1, new Tower(GameBoard, Color.White));
@@ -196,7 +240,7 @@ namespace chess
             InsertNewPiece('b', 8, new Horse(GameBoard, Color.Black));
             InsertNewPiece('c', 8, new Bishop(GameBoard, Color.Black));
             InsertNewPiece('d', 8, new Queen(GameBoard, Color.Black));
-            InsertNewPiece('e', 8, new King(GameBoard, Color.Black));
+            InsertNewPiece('e', 8, new King(GameBoard, Color.Black,this));
             InsertNewPiece('f', 8, new Bishop(GameBoard, Color.Black));
             InsertNewPiece('g', 8, new Horse(GameBoard, Color.Black));
             InsertNewPiece('h', 8, new Tower(GameBoard, Color.Black));
