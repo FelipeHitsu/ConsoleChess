@@ -11,21 +11,23 @@ namespace chess
         public int Turn { get; private set; }
         public Color ActualPlayer { get; private set; }
         public bool Finished { get; private set; }
+        public bool InCheck { get; private set; }
         private HashSet<Piece> Pieces;
         private HashSet<Piece> CapturedPieces;
 
         public ChessGame()
         {
-            GameBoard = new Board(8,8);
+            GameBoard = new Board(8, 8);
             Turn = 1;
             ActualPlayer = Color.White;
             Finished = false;
+            InCheck = false;
             Pieces = new HashSet<Piece>();
             CapturedPieces = new HashSet<Piece>();
             StartPieces();
         }
 
-        public void ExecuteMove(Position origin,Position destination)
+        public Piece ExecuteMove(Position origin, Position destination)
         {
             Piece p = GameBoard.RemovePiece(origin);
             p.IncreaseMoveCount();
@@ -33,11 +35,32 @@ namespace chess
             GameBoard.InsertPiece(p, destination);
             if (capturedPiece != null)
                 CapturedPieces.Add(capturedPiece);
+            return capturedPiece;
         }
-
-        public void MakeMove(Position origin,Position destination)
+        public void UndoMove(Position origin, Position destination, Piece captured)
         {
-            ExecuteMove(origin, destination);
+            Piece p = GameBoard.RemovePiece(destination);
+            p.DecreaseMoveCount();
+            if (captured != null)
+            {
+                GameBoard.InsertPiece(captured, destination);
+                CapturedPieces.Remove(captured);
+            }
+            GameBoard.InsertPiece(p, origin);
+        }
+        public void MakeMove(Position origin, Position destination)
+        {
+            Piece capturedPiece = ExecuteMove(origin, destination);
+            if (IsInCheck(ActualPlayer))
+            {
+                UndoMove(origin, destination, capturedPiece);
+                throw new BoardException("Can't do this move: you will be in check");
+            }
+            if (IsInCheck(Opponent(ActualPlayer)))
+                InCheck = true;
+            else
+                InCheck = false;
+
             NextPlayer();
             Turn++;
         }
@@ -59,7 +82,7 @@ namespace chess
             if (!GameBoard.GetPiece(p).CanMove())
                 throw new BoardException("The selected piece can't move");
         }
-        public void ValidateDestination(Position origin,Position destination)
+        public void ValidateDestination(Position origin, Position destination)
         {
             if (!GameBoard.GetPiece(origin).CanMoveTo(destination))
                 throw new BoardException("Invalid Destination Position");
@@ -67,7 +90,7 @@ namespace chess
         public HashSet<Piece> GetCapturedPieces(Color color)
         {
             HashSet<Piece> aux = new HashSet<Piece>();
-            foreach(Piece p in CapturedPieces)
+            foreach (Piece p in CapturedPieces)
             {
                 if (p._Color == color)
                     aux.Add(p);
@@ -85,7 +108,37 @@ namespace chess
             aux.ExceptWith(GetCapturedPieces(color));
             return aux;
         }
-        public void InsertNewPiece(char column,int line,Piece p)
+        private Color Opponent(Color color)
+        {
+            if (color == Color.White)
+                return Color.Black;
+            else
+                return Color.White;
+        }
+        private Piece GetKing(Color color)
+        {
+            foreach (Piece p in GetInGamePieces(color))
+            {
+                if (p is King)
+                    return p;
+            }
+            return null;
+        }
+        public bool IsInCheck(Color color)
+        {
+            Piece K = GetKing(color);
+            if (K == null)
+                throw new BoardException("Fatal error, no king of " + color + " pieces on board");
+
+            foreach (Piece p in GetInGamePieces(Opponent(color)))
+            {
+                bool[,] matrix = p.PossibleMoves();
+                if (matrix[K._Position.Line, K._Position.Column])
+                    return true;
+            }
+            return false;
+        }
+        public void InsertNewPiece(char column, int line, Piece p)
         {
             GameBoard.InsertPiece(p, new ChessPosition(column, line).ToPosition());
             Pieces.Add(p);

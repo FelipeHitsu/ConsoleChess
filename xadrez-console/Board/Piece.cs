@@ -19,7 +19,10 @@
         {
             MovesAmount ++;
         }
-
+        public void DecreaseMoveCount()
+        {
+            MovesAmount--;
+        }
         public bool CanMove()
         {
             bool[,] matrix = PossibleMoves();
