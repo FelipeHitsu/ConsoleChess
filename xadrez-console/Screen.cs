@@ -14,9 +14,17 @@ namespace xadrez_console
             DrawCapturedPieces(game);
             Console.WriteLine();
             Console.WriteLine("Turn: " + game.Turn);
-            Console.WriteLine("Waiting for move: " + game.ActualPlayer);
-            if(game.InCheck)
-                Console.WriteLine("Check !");
+            if (!game.Finished)
+            {
+                Console.WriteLine("Waiting for move: " + game.ActualPlayer);
+                if (game.InCheck)
+                    Console.WriteLine("Check !");
+            }
+            else
+            {
+                Console.WriteLine("CheckMate !");
+                Console.WriteLine("Winner: " + game.ActualPlayer.ToString().ToUpper());
+            }
         }
         public static void DrawCapturedPieces(ChessGame game)
         {
