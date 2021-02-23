@@ -88,7 +88,7 @@ namespace chess
         }
         public void ValidateDestination(Position origin, Position destination)
         {
-            if (!GameBoard.GetPiece(origin).CanMoveTo(destination))
+            if (!GameBoard.GetPiece(origin).PossibleMove(destination))
                 throw new BoardException("Invalid Destination Position");
         }
         public HashSet<Piece> GetCapturedPieces(Color color)
@@ -175,26 +175,40 @@ namespace chess
         }
         private void StartPieces()
         {
-            /* InsertNewPiece('c', 1, new Tower(GameBoard, Color.White));
-             InsertNewPiece('c', 2, new Tower(GameBoard, Color.White));
-             InsertNewPiece('d', 2, new Tower(GameBoard, Color.White));
-             InsertNewPiece('e', 2, new Tower(GameBoard, Color.White));
-             InsertNewPiece('e', 1, new Tower(GameBoard, Color.White));
-             InsertNewPiece('d', 1, new King(GameBoard, Color.White));
+            InsertNewPiece('a',1, new Tower(GameBoard, Color.White));
+            InsertNewPiece('b',1, new Horse(GameBoard, Color.White));
+            InsertNewPiece('c',1, new Bishop(GameBoard, Color.White));
+            InsertNewPiece('d',1, new Queen(GameBoard, Color.White));
+            InsertNewPiece('e',1, new King(GameBoard, Color.White));
+            InsertNewPiece('f',1, new Bishop(GameBoard, Color.White));
+            InsertNewPiece('g',1, new Horse(GameBoard, Color.White));
+            InsertNewPiece('h',1, new Tower(GameBoard, Color.White));
+            InsertNewPiece('a',2, new Pawn(GameBoard, Color.White));
+            InsertNewPiece('b', 2, new Pawn(GameBoard, Color.White));
+            InsertNewPiece('c', 2, new Pawn(GameBoard, Color.White));
+            InsertNewPiece('d', 2, new Pawn(GameBoard, Color.White));
+            InsertNewPiece('e', 2, new Pawn(GameBoard, Color.White));
+            InsertNewPiece('f', 2, new Pawn(GameBoard, Color.White));
+            InsertNewPiece('g', 2, new Pawn(GameBoard, Color.White));
+            InsertNewPiece('h', 2, new Pawn(GameBoard, Color.White));
 
-             InsertNewPiece('c', 7, new Tower(GameBoard, Color.Black));
-             InsertNewPiece('c', 8, new Tower(GameBoard, Color.Black));
-             InsertNewPiece('d', 7, new Tower(GameBoard, Color.Black));
-             InsertNewPiece('e', 7, new Tower(GameBoard, Color.Black));
-             InsertNewPiece('e', 8, new Tower(GameBoard, Color.Black));
-             InsertNewPiece('d', 8, new King(GameBoard, Color.Black));*/
+            InsertNewPiece('a', 8, new Tower(GameBoard, Color.Black));
+            InsertNewPiece('b', 8, new Horse(GameBoard, Color.Black));
+            InsertNewPiece('c', 8, new Bishop(GameBoard, Color.Black));
+            InsertNewPiece('d', 8, new Queen(GameBoard, Color.Black));
+            InsertNewPiece('e', 8, new King(GameBoard, Color.Black));
+            InsertNewPiece('f', 8, new Bishop(GameBoard, Color.Black));
+            InsertNewPiece('g', 8, new Horse(GameBoard, Color.Black));
+            InsertNewPiece('h', 8, new Tower(GameBoard, Color.Black));
+            InsertNewPiece('a', 7, new Pawn(GameBoard, Color.Black));
+            InsertNewPiece('b', 7, new Pawn(GameBoard, Color.Black));
+            InsertNewPiece('c', 7, new Pawn(GameBoard, Color.Black));
+            InsertNewPiece('d', 7, new Pawn(GameBoard, Color.Black));
+            InsertNewPiece('e', 7, new Pawn(GameBoard, Color.Black));
+            InsertNewPiece('f', 7, new Pawn(GameBoard, Color.Black));
+            InsertNewPiece('g', 7, new Pawn(GameBoard, Color.Black));
+            InsertNewPiece('h', 7, new Pawn(GameBoard, Color.Black));
 
-            InsertNewPiece('c', 1, new Tower(GameBoard, Color.White));
-            InsertNewPiece('h', 7, new Tower(GameBoard, Color.White));
-            InsertNewPiece('d', 1, new King(GameBoard, Color.White));
-
-            InsertNewPiece('b', 8, new Tower(GameBoard, Color.Black));
-            InsertNewPiece('a', 8, new King(GameBoard, Color.Black));
         }
     }
 }
