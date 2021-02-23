@@ -19,11 +19,7 @@ namespace xadrez_console
                     {
                         //GameLoop
                         Console.Clear();
-                        Screen.DrawBoard(game.GameBoard);
-                        Console.WriteLine();
-
-                        Console.WriteLine("Turn: " + game.Turn);
-                        Console.WriteLine("Waiting for move: " + game.ActualPlayer);
+                        Screen.DrawGame(game);
 
                         Console.WriteLine();
                         Console.Write("Origem: ");
