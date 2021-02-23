@@ -15,12 +15,28 @@
             MovesAmount = 0;
         }
         public abstract bool[,] PossibleMoves();
-
-        
-
         public void IncreaseMoveCount()
         {
             MovesAmount ++;
+        }
+
+        public bool CanMove()
+        {
+            bool[,] matrix = PossibleMoves();
+            for(int i = 0; i < _Board.Lines; i++)
+            {
+                for(int j = 0; j < _Board.Columns; j++)
+                {
+                    if (matrix[i, j])
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        public bool CanMoveTo(Position p)
+        {
+            return PossibleMoves()[p.Line, p.Column];
         }
     }
 }

@@ -43,6 +43,21 @@ namespace chess
             else
                 ActualPlayer = Color.White;
         }
+
+        public void ValidateOriginPosition(Position p)
+        {
+            if (GameBoard.GetPiece(p) == null)
+                throw new BoardException("Empty position");
+            if (ActualPlayer != GameBoard.GetPiece(p)._Color)
+                throw new BoardException("Wrong color piece selected");
+            if (!GameBoard.GetPiece(p).CanMove())
+                throw new BoardException("The selected piece can't move");
+        }
+        public void ValidateDestination(Position origin,Position destination)
+        {
+            if (!GameBoard.GetPiece(origin).CanMoveTo(destination))
+                throw new BoardException("Invalid Destination Position");
+        }
         private void StartPieces()
         {
             GameBoard.InsertPiece(new Tower(GameBoard, Color.White), new ChessPosition('a', 1).ToPosition()); 
